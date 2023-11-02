@@ -7,8 +7,8 @@ export default function Experience() {
     const material = new THREE.ShaderMaterial({
 
         uniforms: {
-            time: {value: 1.0},
-            resolution: {value: new THREE.Vector2()}
+            u_resolution: {value: new THREE.Vector2(100, 100)}
+
         },
 
         vertexShader: document.getElementById('vertexShader').textContent,

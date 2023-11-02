@@ -13,24 +13,31 @@
     <div id="root"></div>
     <script type="module" src="./index.jsx"></script>
     <script id="vertexShader" type="x-shader-vertex">
-        varying vec2 v_uv;
+varying vec2 vUv;
 
-        void main()
-        {
-            v_uv = uv;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
+void main()
+{
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}
     </script>
     <script id="fragmentShader" type="x-shader-fragment">
-        uniform vec2 u_resolution;
-        varying vec2 v_uv;
+uniform vec2 u_resolution;
+varying vec2 vUv;
 
-        void main()
-        {
-            vec2 uv = gl_FragCoord.xy / u_resolution;
+float hash12(vec2 p)
+{
+	vec3 p3  = fract(vec3(p.xyx) * .1031);
+    p3 += dot(p3, p3.yzx + 33.33);
+    return fract((p3.x + p3.y) * p3.z);
+}
 
-            gl_FragColor = vec4( v_uv, 0.0, 1.0);
-        }
+void main()
+{
+    vec2 uv = floor(vUv * u_resolution);
+    float rdm = floor(hash12(uv * 100.) + 0.5);
+    gl_FragColor = vec4(0.2, 0.6, 0.3 , rdm);
+}
     </script>
 </body>
 
