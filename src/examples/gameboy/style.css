@@ -1,0 +1,57 @@
+html,
+body,
+#root
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(45deg, #482739 25%, transparent 25%), linear-gradient(-45deg, #4c2a4f 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #482d57 75%), linear-gradient(-45deg, transparent 75%, #4f272c 75%);
+    background-size: 40px 40px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    box-shadow: 0 0 800px rgba(0,0,0,0.9) inset;
+}
+
+html{
+    background-color: #270d21;
+}
+a.not-a{
+    cursor:pointer;
+    z-index: 100;
+    color: #ffffff;
+    text-decoration: none;
+    font-family: "monospace", monospace;
+    font-size: 2.2vmin;
+    text-shadow: 0 0 5px #C8C8C8;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.back{
+    position: fixed;
+    top:10px;left:1vmin;
+}
+.home{
+    position: fixed;
+    top:10px;left:12.6vmin;
+    color: rgba(184,184,184,0);
+}
+.overlay {
+    z-index: 100;
+    position: absolute;
+    top: 30px;left: 20px;
+    color: white;
+    font-family: 'monospace', monospace;
+    font-size: 2.2vmin;
+    text-shadow: 0 0 5px #C8C8C8;
+
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
