@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Sphere, Box} from '@react-three/drei'
+import {Sphere, TorusKnot} from '@react-three/drei'
 
 export default function FurMesh({height}) {
     const material = new THREE.ShaderMaterial({
@@ -8,7 +8,7 @@ export default function FurMesh({height}) {
         //depthTest: false,
         side: THREE.DoubleSide,
         uniforms: {
-            u_resolution: {value: new THREE.Vector2(100, 100)},
+            u_resolution: {value: new THREE.Vector2(1000, 100)},
             u_height: {value: height}
         },
 
@@ -18,6 +18,6 @@ export default function FurMesh({height}) {
     });
 
     return <>
-        <Sphere material={material} />
+        <TorusKnot material={material} />
     </>;
 }
