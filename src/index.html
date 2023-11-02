@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +8,30 @@
     <link rel="icon" type="image/png" href="/public/collatz.png">
     <title>Islands</title>
 </head>
+
 <body>
     <div id="root"></div>
     <script type="module" src="./index.jsx"></script>
+    <script id="vertexShader" type="x-shader-vertex">
+        varying vec2 v_uv;
+
+        void main()
+        {
+            v_uv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    </script>
+    <script id="fragmentShader" type="x-shader-fragment">
+        uniform vec2 u_resolution;
+        varying vec2 v_uv;
+
+        void main()
+        {
+            vec2 uv = gl_FragCoord.xy / u_resolution;
+
+            gl_FragColor = vec4( v_uv, 0.0, 1.0);
+        }
+    </script>
 </body>
+
 </html>
