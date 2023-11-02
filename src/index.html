@@ -14,15 +14,18 @@
     <script type="module" src="./index.jsx"></script>
     <script id="vertexShader" type="x-shader-vertex">
 varying vec2 vUv;
+uniform float u_height;
 
 void main()
 {
     vUv = uv;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position +
+    normal*u_height*0.1, 1.0); 
 }
     </script>
     <script id="fragmentShader" type="x-shader-fragment">
 uniform vec2 u_resolution;
+uniform float u_height;
 varying vec2 vUv;
 
 float hash12(vec2 p)
@@ -35,8 +38,9 @@ float hash12(vec2 p)
 void main()
 {
     vec2 uv = floor(vUv * u_resolution);
-    float rdm = floor(hash12(uv * 100.) + 0.5);
-    gl_FragColor = vec4(0.2, 0.6, 0.3 , rdm);
+    float rdm = floor(hash12(uv * 100.) + u_height);
+    vec3 color = vec3(0.2, 0.6, 0.3 ) * u_height;
+    gl_FragColor = vec4(color , 1.-rdm);
 }
     </script>
 </body>
