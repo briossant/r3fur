@@ -16,14 +16,20 @@
 varying vec2 vUv;
 uniform float u_height;
 uniform vec2 u_resolution;
-uniform float u_gravity;
+uniform vec3 u_forces;
 uniform float u_spacing;
 
 void main()
 {
     vUv = uv * u_resolution;
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position +
-    normal*u_height*u_spacing - vec3(0.,pow(u_height, 2.)*u_gravity,0.), 1.0); 
+
+    // add spacing
+    vec3 npos = position + normal*u_height*u_spacing; 
+
+    // add forces 
+    npos += u_forces * pow(u_height, 2.); 
+
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(npos, 1.0); 
 }
     </script>
     <script id="fragmentShader" type="x-shader-fragment">
@@ -41,8 +47,12 @@ float hash12(vec2 p)
 
 void main()
 {
+    // check if square activated
     float activ =  1. - floor(hash12(floor(vUv) * 42.) + u_height);
+
+    // check if in radius
     float inRadius = 1. - floor(length(fract(vUv)*2. - 1.) * u_radius * u_height);
+
     vec3 color = u_color * u_height;
     gl_FragColor = vec4(color , activ * inRadius);
 }
