@@ -1,13 +1,18 @@
-import {OrbitControls, Box} from '@react-three/drei'
-import * as THREE from 'three';
+import {OrbitControls} from '@react-three/drei'
 import FurMesh from "./FurMesh"
 import {Perf} from 'r3f-perf'
+import {useControls} from 'leva'
 
-
-const layers = 82;
 
 export default function Experience() {
-
+    const {layers} = useControls("Settings", {
+        layers: {
+            value: 42,
+            step: 1,
+            min: 1,
+            max: 142
+        }
+    });
 
     return <>
 

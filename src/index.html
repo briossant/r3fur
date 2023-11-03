@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/public/collatz.png">
-    <title>Islands</title>
+    <title>R3FUR</title>
 </head>
 
 <body>
@@ -16,17 +16,21 @@
 varying vec2 vUv;
 uniform float u_height;
 uniform vec2 u_resolution;
+uniform float u_gravity;
+uniform float u_spacing;
 
 void main()
 {
     vUv = uv * u_resolution;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(position +
-    normal*u_height*0.3 - vec3(0.,pow(u_height, 2.)*0.1,0.), 1.0); 
+    normal*u_height*u_spacing - vec3(0.,pow(u_height, 2.)*u_gravity,0.), 1.0); 
 }
     </script>
     <script id="fragmentShader" type="x-shader-fragment">
 uniform float u_height;
 varying vec2 vUv;
+uniform float u_radius;
+uniform vec3 u_color;
 
 float hash12(vec2 p)
 {
@@ -38,8 +42,8 @@ float hash12(vec2 p)
 void main()
 {
     float activ =  1. - floor(hash12(floor(vUv) * 42.) + u_height);
-    float inRadius = 1. - floor(length(fract(vUv)*2. - 1.) * 4. * u_height);
-    vec3 color = vec3(0.2, 0.6, 0.3 ) * u_height;
+    float inRadius = 1. - floor(length(fract(vUv)*2. - 1.) * u_radius * u_height);
+    vec3 color = u_color * u_height;
     gl_FragColor = vec4(color , activ * inRadius);
 }
     </script>
