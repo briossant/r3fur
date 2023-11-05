@@ -16,20 +16,27 @@ export default function Experience() {
         }
     });
     const {camera} = useThree();
-    const [arr, setArr] = useState([...Array(layers)].fill(new THREE.Vector3(0, 0, 0)));
+    const arr = ([...Array(layers)].fill(new THREE.Vector3(0, 0, 0)));
 
-    const [mouse, setMouse] = useState(new THREE.Vector3(0, 0, 0));
+    const mouse = (new THREE.Vector3(0, 0, 0));
     window.addEventListener("mousemove", (event) => {
-        setMouse(new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, 0, -event.clientY / window.innerHeight * 2 - 1));
+        const dir = (new THREE.Vector3(event.clientX / window.innerWidth * 2 - 1, -event.clientY / window.innerHeight * 2 + 1, 0.5));
+        dir.unproject(camera);
+        dir.sub(camera.position).normalize()
+        const dist = -camera.position.z / dir.z;
+        mouse.copy(camera.position).add(dir.multiplyScalar(dist));
     });
 
-    useFrame(() => {
-        const narr = [...Array(layers)].fill(new THREE.Vector3(0, 0, 0));
-        for (let i = Math.min(arr.length, layers - 1); i > 0; i--)
-            narr[i] = arr[i - 1];
-        narr[0] = mouse.clone();
-        console.log(narr[0])
-        setArr(narr);
+    let elapsed = 0;
+    useFrame((_, delta) => {
+        elapsed += delta;
+        if (elapsed < 0.3)
+            return;
+        elapsed = 0;
+        for (let i = arr.length - 1; i > 0; i--)
+            arr[i].copy(arr[i - 1].clone());
+        arr[0].copy(mouse.clone());
+        console.log(arr)
     });
 
 

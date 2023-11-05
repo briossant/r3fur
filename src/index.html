@@ -24,10 +24,10 @@ void main()
     vUv = uv * u_resolution;
 
     // add spacing
-    vec3 npos = position + normal*u_height*u_spacing; 
+    vec3 npos = position + u_forces + normal*u_height*u_spacing; 
 
     // add forces 
-    npos += u_forces * pow(u_height, 2.); 
+    //npos += u_forces * pow(u_height, 2.); 
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(npos, 1.0); 
 }

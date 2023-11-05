@@ -6,8 +6,6 @@ import {useFrame} from "@react-three/fiber";
 const vertexShader = document.getElementById('vertexShader').textContent;
 const fragmentShader = document.getElementById('fragmentShader').textContent;
 
-const a = 0.4;
-
 export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), children}) {
 
     const {resolution, spacing, stiffness, color, radius} = useControls("Settings", {
@@ -24,10 +22,10 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             max: 2
         },
         stiffness: {
-            value: 0.1,
+            value: 2.1,
             step: 0.01,
             min: 0,
-            max: 0.42
+            max: 3.42
         },
         color: {
             value: "#8ffffd",
@@ -49,25 +47,20 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             u_radius: {value: radius},
         }), []
     );
-    const mesh = useRef();
     const shader = useRef();
 
     useFrame((_, delta) => {
-        const dir = position.clone().sub(mesh.current.position).multiplyScalar(a * delta);
-
-        mesh.current.position.x += dir.x;
-        mesh.current.position.y += dir.y;
-        mesh.current.position.z += dir.z;
+        const dir = position.clone().sub(shader.current.uniforms.u_forces.value).multiplyScalar(stiffness * delta);
 
         shader.current.uniforms.u_height.value = height;
         shader.current.uniforms.u_resolution.value = new THREE.Vector2(10 * resolution, resolution);
         shader.current.uniforms.u_spacing.value = spacing;
-        //shader.current.uniforms.u_forces.value = ((new THREE.Vector3(...mov)).multiplyScalar(stiffness));
+        shader.current.uniforms.u_forces.value.add(dir);
         shader.current.uniforms.u_color.value = new THREE.Color(color);
         shader.current.uniforms.u_radius.value = radius;
     });
 
-    return <mesh ref={mesh}>
+    return <mesh >
         {children}
         <shaderMaterial
             ref={shader}
