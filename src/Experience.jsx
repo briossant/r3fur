@@ -1,4 +1,5 @@
 import {OrbitControls} from '@react-three/drei'
+import * as THREE from 'three';
 import FurMesh from "./FurMesh"
 import {Perf} from 'r3f-perf'
 import {useControls} from 'leva'
@@ -23,8 +24,11 @@ export default function Experience() {
         <ambientLight intensity={0.5} />
         <group>
             {[...Array(layers)].map((_, i) =>
-                <FurMesh
-                    height={i / layers} key={i} />)}
+                <FurMesh height={i / layers} position={new THREE.Vector3(0, 2, 0)} key={i} >
+                    <boxGeometry />
+                    <torusKnotGeometry args={[1, 0.4, 128, 16]} />
+                </FurMesh>
+            )}
         </group>
     </>;
 }
