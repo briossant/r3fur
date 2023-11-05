@@ -6,8 +6,7 @@ import {useFrame} from "@react-three/fiber";
 const vertexShader = document.getElementById('vertexShader').textContent;
 const fragmentShader = document.getElementById('fragmentShader').textContent;
 
-const a = 100;
-const maxSpeed = 100;
+const a = 0.4;
 
 export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), children}) {
 
@@ -50,21 +49,15 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             u_radius: {value: radius},
         }), []
     );
-    let speed = useMemo(() => new THREE.Vector3(0, 0, 0), []);
     const mesh = useRef();
     const shader = useRef();
 
     useFrame((_, delta) => {
-        const dir = position.clone().sub(mesh.current.position).normalize();
+        const dir = position.clone().sub(mesh.current.position).multiplyScalar(a * delta);
 
-        speed.add(dir.multiplyScalar(a * delta));
-
-        if (speed.length() > maxSpeed)
-            speed = dir.multiplyScalar(maxSpeed);
-
-        mesh.current.position.x += speed.x * delta;
-        mesh.current.position.y += speed.y * delta;
-        mesh.current.position.z += speed.z * delta;
+        mesh.current.position.x += dir.x;
+        mesh.current.position.y += dir.y;
+        mesh.current.position.z += dir.z;
 
         shader.current.uniforms.u_height.value = height;
         shader.current.uniforms.u_resolution.value = new THREE.Vector2(10 * resolution, resolution);
