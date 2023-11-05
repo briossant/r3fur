@@ -1,18 +1,10 @@
 import {OrbitControls} from '@react-three/drei'
-import * as THREE from 'three';
 import FurMesh from "./FurMesh"
 import {Perf} from 'r3f-perf'
 import {useControls} from 'leva'
 
-
 export default function Experience() {
-    const {stiffness, layers} = useControls("Settings", {
-        stiffness: {
-            value: 0.1,
-            step: 0.01,
-            min: 0,
-            max: 0.42
-        },
+    const {layers} = useControls("Settings", {
         layers: {
             value: 42,
             step: 1,
@@ -21,7 +13,6 @@ export default function Experience() {
         }
     });
 
-    const forces = (new THREE.Vector3(0, -1, 0)).multiplyScalar(stiffness);
 
     return <>
 
@@ -32,7 +23,7 @@ export default function Experience() {
         <ambientLight intensity={0.5} />
         <group>
             {[...Array(layers)].map((_, i) =>
-                <FurMesh forces={forces}
+                <FurMesh
                     height={i / layers} key={i} />)}
         </group>
     </>;
