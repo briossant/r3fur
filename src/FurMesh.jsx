@@ -8,7 +8,7 @@ const fragmentShader = document.getElementById('fragmentShader').textContent;
 
 export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), children}) {
 
-    const {resolution, spacing, stiffness, color, radius} = useControls("Settings", {
+    const {resolution, spacing, speed, color, radius} = useControls("Settings", {
         resolution: {
             value: 100,
             step: 1,
@@ -21,7 +21,7 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             min: 0.01,
             max: 2
         },
-        stiffness: {
+        speed: {
             value: 2.1,
             step: 0.01,
             min: 0,
@@ -42,7 +42,7 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             u_resolution: {value: new THREE.Vector2(10 * resolution, resolution)},
             u_height: {value: height},
             u_spacing: {value: spacing},
-            u_forces: {value: (new THREE.Vector3(0, 0, 0))},
+            u_offset: {value: (new THREE.Vector3(0, 0, 0))},
             u_color: {value: new THREE.Color(color)},
             u_radius: {value: radius},
         }), []
@@ -50,12 +50,12 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
     const shader = useRef();
 
     useFrame((_, delta) => {
-        const dir = position.clone().sub(shader.current.uniforms.u_forces.value).multiplyScalar(stiffness * delta);
+        const dir = position.clone().sub(shader.current.uniforms.u_offset.value).multiplyScalar(speed * delta);
 
         shader.current.uniforms.u_height.value = height;
         shader.current.uniforms.u_resolution.value = new THREE.Vector2(10 * resolution, resolution);
         shader.current.uniforms.u_spacing.value = spacing;
-        shader.current.uniforms.u_forces.value.add(dir);
+        shader.current.uniforms.u_offset.value.add(dir);
         shader.current.uniforms.u_color.value = new THREE.Color(color);
         shader.current.uniforms.u_radius.value = radius;
     });

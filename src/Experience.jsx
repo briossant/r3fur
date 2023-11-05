@@ -4,19 +4,24 @@ import * as THREE from 'three';
 import FurMesh from "./FurMesh"
 import {Perf} from 'r3f-perf'
 import {useControls} from 'leva'
-import {useState} from 'react';
 
 export default function Experience() {
-    const {layers} = useControls("Settings", {
+    const {layers, stiffness} = useControls("Settings", {
         layers: {
             value: 42,
             step: 1,
             min: 1,
             max: 142
+        },
+        stiffness: {
+            value: 2,
+            min: 1,
+            max: 10,
+            step: 1
         }
     });
     const {camera} = useThree();
-    const arr = ([...Array(layers)].fill(new THREE.Vector3(0, 0, 0)));
+    const arr = [...Array(layers)].map(() => new THREE.Vector3(0, 0, 0));
 
     const mouse = (new THREE.Vector3(0, 0, 0));
     window.addEventListener("mousemove", (event) => {
@@ -27,16 +32,13 @@ export default function Experience() {
         mouse.copy(camera.position).add(dir.multiplyScalar(dist));
     });
 
-    let elapsed = 0;
-    useFrame((_, delta) => {
-        elapsed += delta;
-        if (elapsed < 0.3)
-            return;
-        elapsed = 0;
-        for (let i = arr.length - 1; i > 0; i--)
-            arr[i].copy(arr[i - 1].clone());
-        arr[0].copy(mouse.clone());
-        console.log(arr)
+    useFrame(() => {
+        const offset = stiffness;
+        for (let i = arr.length - offset - 1; i >= 0; i -= offset)
+            for (let j = 1; j <= offset; j++)
+                arr[i + j].copy(arr[i]);
+        for (let i = 0; i < (layers % offset == 0 ? offset : layers % offset); i++)
+            arr[i].copy(mouse);
     });
 
 

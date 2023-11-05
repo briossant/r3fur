@@ -16,7 +16,7 @@
 varying vec2 vUv;
 uniform float u_height;
 uniform vec2 u_resolution;
-uniform vec3 u_forces;
+uniform vec3 u_offset;
 uniform float u_spacing;
 
 void main()
@@ -24,10 +24,7 @@ void main()
     vUv = uv * u_resolution;
 
     // add spacing
-    vec3 npos = position + u_forces + normal*u_height*u_spacing; 
-
-    // add forces 
-    //npos += u_forces * pow(u_height, 2.); 
+    vec3 npos = position + u_offset + normal*u_height*u_spacing; 
 
     gl_Position = projectionMatrix * modelViewMatrix * vec4(npos, 1.0); 
 }
