@@ -10,6 +10,17 @@
 </head>
 
 <body>
+    <a href="/3d-demo" class="not-a back">ᐸ BACK</a><a href="/" class="not-a home">🏠 HOME</a>
+    <div class="overlay">
+        <h2>Fur</h2>
+        <p>From the Acerola video: <a style="color: yellow"
+                href="https://www.youtube.com/watch?v=9dr-tRQzij4">youtube</a>. </p>
+        <p>Move your mouse around to see the effect. <br>This demo is
+            made for PC usage. <br> Code on <a href="https://github.com/briossant/r3fur" style="color:
+                yellow">Github</a>.
+        </p>
+
+    </div>
     <div id="root"></div>
     <script type="module" src="./index.jsx"></script>
     <script id="vertexShader" type="x-shader-vertex">
@@ -24,9 +35,8 @@ void main()
     vUv = uv * u_resolution;
 
     // add spacing
-    vec3 npos = position + u_offset + normal*u_height*u_spacing; 
-
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(npos, 1.0); 
+    vec3 npos = u_offset + normal*u_height*u_spacing; 
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position + npos, 1.0); 
 }
     </script>
     <script id="fragmentShader" type="x-shader-fragment">

@@ -1,4 +1,4 @@
-import {OrbitControls} from '@react-three/drei'
+import {OrbitControls, Sky} from '@react-three/drei'
 import {useThree, useFrame} from '@react-three/fiber';
 import * as THREE from 'three';
 import FurMesh from "./FurMesh"
@@ -34,17 +34,16 @@ export default function Experience() {
 
     useFrame(() => {
         const offset = stiffness;
-        for (let i = arr.length - offset - 1; i >= 0; i -= offset)
-            for (let j = 1; j <= offset; j++)
-                arr[i + j].copy(arr[i]);
-        for (let i = 0; i < (layers % offset == 0 ? offset : layers % offset); i++)
-            arr[i].copy(mouse);
+        for (let i = arr.length - 1; i > 0; i--)
+            arr[i].copy(arr[Math.max(i - offset, 0)]);
+        arr[0].copy(mouse);
     });
 
 
     return <>
 
-        <Perf position="top-left" />
+        <Sky />
+        {/*<Perf position="top-left" />*/}
         <OrbitControls />
         <directionalLight color={"#ffffff"} position={[-1, -2, -3]} intensity={0.3} shadow-normalBias={0.04} />
         <directionalLight color={"#ffffff"} castShadow position={[1, 2, 3]} intensity={1.5} shadow-normalBias={0.04} />

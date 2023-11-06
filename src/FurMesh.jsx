@@ -28,7 +28,7 @@ export default function FurMesh({height, position = new THREE.Vector3(0, 0, 0), 
             max: 3.42
         },
         color: {
-            value: "#8ffffd",
+            value: "#b8ffb8",
         },
         radius: {
             value: 4,
